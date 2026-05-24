@@ -1,20 +1,17 @@
 # ── Stage 1: Build ──────────────────────────────────────────────────────────
-# Build context is the repo ROOT (Railway uses root even when Dockerfile is
-# inside a subdirectory). All COPY paths must be relative to repo root.
-FROM eclipse-temurin:21-jdk-alpine AS builder
+# Use the official Maven + JDK image — no need for mvnw wrapper
+FROM maven:3.9-eclipse-temurin-21-alpine AS builder
 WORKDIR /app
 
-# Copy Maven wrapper + pom first (layer cache — only re-downloads on pom change)
+# Copy pom first (layer cache — only re-downloads deps when pom changes)
 COPY elevator-backend/pom.xml .
-COPY elevator-backend/mvnw .
-COPY elevator-backend/.mvn .mvn
 
 # Download dependencies (cached unless pom.xml changes)
-RUN chmod +x mvnw && ./mvnw dependency:go-offline -q
+RUN mvn dependency:go-offline -q
 
 # Copy source and build
 COPY elevator-backend/src ./src
-RUN ./mvnw package -DskipTests -q
+RUN mvn package -DskipTests -q
 
 # ── Stage 2: Run ────────────────────────────────────────────────────────────
 FROM eclipse-temurin:21-jre-alpine
