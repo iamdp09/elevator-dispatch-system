@@ -191,12 +191,37 @@ body {
   box-shadow: var(--shadow-card);
 }
 
-/* Building: [floor-panel | shafts] side by side */
-.building {
-  display: flex;
-  gap: 0;
-  align-items: flex-start;
+/* -- Building grid (header row + content row) -------------------------------- */
+/* Two CSS grid cols: [floor-panel] [shafts]. Header row's empty first cell   */
+/* auto-matches FloorPanel's actual rendered width — no manual spacer needed. */
+.building-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
 }
+
+/* Row of E1/E2/E3 labels — sits in column 2, row 1 */
+.shafts-header-row {
+  display: flex;
+  gap: 12px;          /* must match .shafts-container gap */
+  padding-bottom: 6px;
+  align-items: flex-end;
+}
+
+/* One label cell per shaft — width matches --shaft-w */
+.shaft-col-label {
+  width: var(--shaft-w);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Floor panel + shafts row — both are grid children, so they sit in row 2 */
+/* .building no longer needed but kept for safety */
+.building {
+  display: contents;
+}
+
 
 /* ── Floor panel (labels + hall buttons) ─────────────────────────────────── */
 .floor-panel-column {
@@ -286,18 +311,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
   width: var(--shaft-w);
 }
 
-.shaft-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding-bottom: 8px;
-  width: 100%;
-}
 
 .shaft-label {
   font-size: 0.82rem;

@@ -137,11 +137,9 @@ export default function App() {
                 </span>
               </div>
 
-              <div className="building">
-                {/* Floor labels + hall call buttons */}
+              {/* Building grid */}
+              <div className="building-grid">
                 <FloorPanel hallCalls={hallCalls} onHallCall={sendHallCall} />
-
-                {/* Three elevator shafts */}
                 <div className="shafts-container">
                   {elevators.map(e => (
                     <ElevatorShaft key={e.elevatorId} elevator={e} />
