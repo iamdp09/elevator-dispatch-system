@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- ============================================================
+       PARENT — inherits Spring Boot dependency management,
+       plugin versions, and sensible defaults.
+       3.4.5 is the latest stable that bundles:
+         Mockito  5.14.2  (Java 25 support)
+         ByteBuddy 1.15.x (required by Mockito for Java 25)
+         Lombok   — managed separately (1.18.38 for Java 25)
+  ============================================================ -->
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.4.5</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>com.elevator</groupId>
+  <artifactId>elevator-backend</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <name>Elevator Dispatch System — Backend</name>
+  <description>
+    Intelligent Elevator Dispatch and Optimization System.
+    Uses Nearest Car + LOOK scheduling with real-time WebSocket communication.
+  </description>
+
+  <properties>
+    <java.version>21</java.version>
+  </properties>
+
+  <dependencies>
+
+    <!-- ─────────────────────────────────────────────────────────
+         Spring Boot Web — REST endpoints, Jackson JSON serialization
+    ───────────────────────────────────────────────────────────── -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <!-- ─────────────────────────────────────────────────────────
+         Spring WebSocket — STOMP protocol support.
+         Clients connect via SockJS → STOMP → topic broadcasts.
+    ───────────────────────────────────────────────────────────── -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-websocket</artifactId>
+    </dependency>
+
+    <!-- ─────────────────────────────────────────────────────────
+         Lombok 1.18.38 — Java 25 compatible.
+         Eliminates boilerplate: @Data, @Builder, @Slf4j etc.
+         1.18.34 crashes on Java 25 (TypeTag.UNKNOWN removed).
+    ───────────────────────────────────────────────────────────── -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.38</version>
+      <optional>true</optional>
+    </dependency>
+
+    <!-- ─────────────────────────────────────────────────────────
+         Spring Boot Test — JUnit 5, Mockito 5.14.2, AssertJ
+         Spring Boot 3.4.5 bundles versions tested on Java 25.
+    ───────────────────────────────────────────────────────────── -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Packages app as a runnable JAR -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+            </exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+
+      <!-- Surefire: open java.base internals for Mockito/ByteBuddy on Java 25 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <argLine>
+            --add-opens java.base/java.lang=ALL-UNNAMED
+            --add-opens java.base/java.util=ALL-UNNAMED
+            --add-opens java.base/java.util.concurrent=ALL-UNNAMED
+            --add-opens java.base/java.lang.reflect=ALL-UNNAMED
+          </argLine>
+        </configuration>
+      </plugin>
+
+      <!-- Lombok annotation processing: REQUIRED for @Slf4j, @Data, @Builder etc. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>1.18.38</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

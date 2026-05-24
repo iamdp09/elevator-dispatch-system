@@ -1,0 +1,64 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# .gitignore — Elevator Dispatch System
+# Covers: Java/Maven (backend) + Node/Vite (frontend) + OS + IDE
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ── Java / Maven (backend) ────────────────────────────────────────────────────
+elevator-backend/target/
+elevator-backend/*.jar
+elevator-backend/*.war
+elevator-backend/.mvn/wrapper/maven-wrapper.jar
+!elevator-backend/.mvn/wrapper/maven-wrapper.properties
+
+# Spring Boot dev tools
+elevator-backend/HELP.md
+
+# Compiled class files
+*.class
+
+# ── Node / Vite (frontend) ────────────────────────────────────────────────────
+elevator-frontend/node_modules/
+elevator-frontend/dist/
+elevator-frontend/dist-ssr/
+elevator-frontend/.vite/
+
+# Local env files (contain secrets — never commit these)
+elevator-frontend/.env
+elevator-frontend/.env.local
+elevator-frontend/.env.*.local
+
+# Build logs
+elevator-frontend/npm-debug.log*
+elevator-frontend/yarn-debug.log*
+elevator-frontend/yarn-error.log*
+
+# ── macOS ─────────────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ── IDE & editors ─────────────────────────────────────────────────────────────
+.idea/
+.idea/**
+*.iml
+.vscode/
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.sw?
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+logs/
+/tmp/*.log
+
+# ── Test output ───────────────────────────────────────────────────────────────
+elevator-backend/surefire-reports/
+elevator-backend/failsafe-reports/
